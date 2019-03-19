@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 actualiserAffichage(false);
             }
         });
+        findViewById(R.id.reset).setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                reset();
+            }
+        });
     }
 
     private void launchDices(boolean j){
