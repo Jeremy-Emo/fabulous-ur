@@ -96,20 +96,31 @@ public class MainActivity extends AppCompatActivity {
         int colonnes = grille.getColumnCount();
         int totalTiragesGlobal = totalJetsJ1 + totalJetsJ2;
 
-        for(int i = 1; i < colonnes; i++){
-            TextView textView = (TextView) grille.getChildAt(i + colonnes);
-            textView.setText(String.valueOf( 100 * (scoresJ1.get(i - 1) + scoresJ2.get(i - 1)) / totalTiragesGlobal ) + "%");
-            if(totalJetsJ1 > 0){
+        if(reset){
+            for(int i = 1; i < colonnes; i++){
+                TextView textView = (TextView) grille.getChildAt(i + colonnes);
+                textView.setText("0%");
                 TextView textViewj1 = (TextView) grille.getChildAt(i + (colonnes * 2));
-                textViewj1.setText(String.valueOf( 100 * scoresJ1.get(i - 1) / totalJetsJ1 ) + "%");
-            }
-            if(totalJetsJ2 > 0 ){
+                textViewj1.setText("0%");
                 TextView textViewj2 = (TextView) grille.getChildAt(i + (colonnes * 3));
-                textViewj2.setText(String.valueOf( 100 * scoresJ2.get(i - 1) / totalJetsJ2 ) + "%");
+                textViewj2.setText("0%");
             }
+            tirages.setText("Tirages");
+        } else {
+            for(int i = 1; i < colonnes; i++){
+                TextView textView = (TextView) grille.getChildAt(i + colonnes);
+                textView.setText(String.valueOf( 100 * (scoresJ1.get(i - 1) + scoresJ2.get(i - 1)) / totalTiragesGlobal ) + "%");
+                if(totalJetsJ1 > 0){
+                    TextView textViewj1 = (TextView) grille.getChildAt(i + (colonnes * 2));
+                    textViewj1.setText(String.valueOf( 100 * scoresJ1.get(i - 1) / totalJetsJ1 ) + "%");
+                }
+                if(totalJetsJ2 > 0 ){
+                    TextView textViewj2 = (TextView) grille.getChildAt(i + (colonnes * 3));
+                    textViewj2.setText(String.valueOf( 100 * scoresJ2.get(i - 1) / totalJetsJ2 ) + "%");
+                }
+            }
+            tirages.setText(String.valueOf(totalTiragesGlobal) + " tirages");
         }
-
-        tirages.setText(String.valueOf(totalTiragesGlobal) + " tirages");
 
     }
 }
