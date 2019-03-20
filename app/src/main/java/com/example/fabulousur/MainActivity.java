@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 value ++;
             }
         }
-        score.setText(String.valueOf(value));
+        score.setText("Résultat : " + String.valueOf(value));
         if(j) {
             scoresJ1.put(value, scoresJ1.get(value) + 1 );
             totalJetsJ1 += 1;
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 textViewj2.setText("0%");
             }
             tirages.setText("Tirages");
+            score.setText("Lancer les dés");
         } else {
             for(int i = 1; i < colonnes; i++){
                 TextView textView = (TextView) grille.getChildAt(i + colonnes);
