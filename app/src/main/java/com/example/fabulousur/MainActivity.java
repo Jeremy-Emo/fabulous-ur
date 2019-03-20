@@ -13,6 +13,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     static private Map<Integer, Integer> scoresJ1;
     static private Map<Integer, Integer> scoresJ2;
     static private TextView score;
+    static private int result;
 
 
     @Override
@@ -48,13 +59,11 @@ public class MainActivity extends AppCompatActivity {
         j1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 launchDices(true);
-                actualiserAffichage(false);
             }
         });
         j2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 launchDices(false);
-                actualiserAffichage(false);
             }
         });
         findViewById(R.id.reset).setOnClickListener(new View.OnClickListener(){
@@ -64,23 +73,45 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void launchDices(boolean j){
+    private void launchDices(final boolean j){
         Random r = new Random();
-        int value = 0;
+        result = 0;
         for(int i = 0; i < 4; i++){
             int lancer =  r.nextInt(2);
             if(lancer > 0){
-                value ++;
+                result ++;
             }
         }
-        score.setText("Résultat : " + String.valueOf(value));
-        if(j) {
-            scoresJ1.put(value, scoresJ1.get(value) + 1 );
-            totalJetsJ1 += 1;
-        } else {
-            scoresJ2.put(value, scoresJ2.get(value) + 1  );
-            totalJetsJ2 += 1;
-        }
+        new CompositeDisposable().add(Observable.interval(50, TimeUnit.MILLISECONDS)
+            .take(1000, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<Long>() {
+                @Override
+                public void accept(Long aLong) throws Exception {
+                    Random r2 = new Random();
+                    score.setText("Résultat : " + String.valueOf(r2.nextInt(5)));
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    score.setText("Résultat : " + String.valueOf(result));
+                    if(j) {
+                        scoresJ1.put(result, scoresJ1.get(result) + 1 );
+                        totalJetsJ1 += 1;
+                    } else {
+                        scoresJ2.put(result, scoresJ2.get(result) + 1  );
+                        totalJetsJ2 += 1;
+                    }
+                    actualiserAffichage(false);
+                }
+            })
+        );
+
     }
 
     private void reset(){
