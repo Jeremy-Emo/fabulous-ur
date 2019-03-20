@@ -66,7 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchDices(boolean j){
         Random r = new Random();
-        int value =  r.nextInt(5);
+        int value = 0;
+        for(int i = 0; i < 4; i++){
+            int lancer =  r.nextInt(2);
+            if(lancer > 0){
+                value ++;
+            }
+        }
         score.setText(String.valueOf(value));
         if(j) {
             scoresJ1.put(value, scoresJ1.get(value) + 1 );
